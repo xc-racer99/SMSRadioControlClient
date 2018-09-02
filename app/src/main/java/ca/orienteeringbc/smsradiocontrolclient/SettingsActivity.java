@@ -1,23 +1,25 @@
 package ca.orienteeringbc.smsradiocontrolclient;
 
+import android.Manifest;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
-import android.media.Ringtone;
-import android.media.RingtoneManager;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
-import android.preference.RingtonePreference;
-import android.text.TextUtils;
+import android.util.Log;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -33,6 +35,9 @@ import java.util.List;
  * API Guide</a> for more information on developing a Settings UI.
  */
 public class SettingsActivity extends AppCompatPreferenceActivity {
+
+    // Permission requests
+    private static final int PERMISSION_REQUEST_RECEIVE_SMS = 1;
 
     /**
      * A preference value change listener that updates the preference's summary
@@ -94,9 +99,35 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
     }
 
     @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           @NonNull String permissions[], @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case PERMISSION_REQUEST_RECEIVE_SMS:
+            {
+                if (grantResults.length > 0
+                        && grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+                    Toast.makeText(this, R.string.sms_permission_denied, Toast.LENGTH_LONG).show();
+                    finish();
+                }
+            }
+            default:
+                Log.d("PermissionRequest", "Unknown permission request code!");
+        }
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setupActionBar();
+
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.RECEIVE_SMS)
+                != PackageManager.PERMISSION_GRANTED) {
+            // Request permission
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.RECEIVE_SMS},
+                    PERMISSION_REQUEST_RECEIVE_SMS);
+        }
     }
 
     /**
