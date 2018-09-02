@@ -1,0 +1,20 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <SwitchPreference
+        android:defaultValue="false"
+        android:key="enabled_switch"
+        android:summary="@string/pref_enabled_description"
+        android:title="@string/pref_enabled_title" />
+
+    <!-- NOTE: EditTextPreference accepts EditText attributes. -->
+    <!-- NOTE: EditTextPreference's summary should be set to its value by the activity code. -->
+    <EditTextPreference
+        android:capitalize="words"
+        android:inputType="textWebEmailAddress"
+        android:key="meos_input_protocol_server"
+        android:maxLines="1"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:title="@string/pref_meos_input_protocol_url" />
+
+</PreferenceScreen>
