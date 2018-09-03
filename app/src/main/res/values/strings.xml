@@ -6,5 +6,7 @@
 
     <string name="pref_meos_input_protocol_url">MeOS Input Server Protocol URL</string>
 
+    <string name="pref_competition_id">Competition ID</string>
+
     <string name="sms_permission_denied">SMS permission is required for this app to work properly</string>
 </resources>

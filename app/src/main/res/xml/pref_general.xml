@@ -11,4 +11,12 @@
         android:singleLine="true"
         android:title="@string/pref_meos_input_protocol_url" />
 
+    <EditTextPreference
+        android:inputType="number"
+        android:key="meos_competition_id"
+        android:maxLines="1"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:title="@string/pref_competition_id" />
+
 </PreferenceScreen>

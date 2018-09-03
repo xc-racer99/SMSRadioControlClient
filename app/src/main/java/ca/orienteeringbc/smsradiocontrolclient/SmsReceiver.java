@@ -60,6 +60,8 @@ public class SmsReceiver extends BroadcastReceiver {
             if (urlString == null)
                 return null;
 
+            String competitionId = sharedPreferences.getString("meos_competition_id", "1");
+
             // Create HttpRequest and set fields appropriately
             URL url;
             try {
@@ -78,7 +80,7 @@ public class SmsReceiver extends BroadcastReceiver {
 
                 Uri.Builder builder = new Uri.Builder()
                         .appendQueryParameter("submit", "true")
-                        .appendQueryParameter("cmp", "1")
+                        .appendQueryParameter("cmp", competitionId)
                         .appendQueryParameter("ctrl", parts[1])
                         .appendQueryParameter("user", parts[2])
                         .appendQueryParameter("time", timeString);

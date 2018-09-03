@@ -184,6 +184,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             // updated to reflect the new value, per the Android Design
             // guidelines.
             bindPreferenceSummaryToValue(findPreference("meos_input_protocol_server"));
+            bindPreferenceSummaryToValue(findPreference("meos_competition_id"));
         }
 
         @Override
