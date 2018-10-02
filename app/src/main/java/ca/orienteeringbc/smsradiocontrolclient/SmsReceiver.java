@@ -25,6 +25,8 @@ public class SmsReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
+        Log.v(TAG, "Received an SMS!");
+
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
 
         SmsMessage[] smsMessages = Telephony.Sms.Intents.getMessagesFromIntent(intent);
@@ -57,21 +59,22 @@ public class SmsReceiver extends BroadcastReceiver {
 
             // Fetch URL from SharedPrefs
             String urlString = sharedPreferences.getString("meos_input_protocol_server", null);
-            if (urlString == null)
+            if (urlString == null) {
+                Log.d(TAG, "No URL set");
                 return null;
+            }
 
             String competitionId = sharedPreferences.getString("meos_competition_id", "1");
 
             // Create HttpRequest and set fields appropriately
             URL url;
+            HttpURLConnection conn = null;
             try {
                 url = new URL(urlString);
 
-                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                conn = (HttpURLConnection) url.openConnection();
                 conn.setReadTimeout(10000);
-                conn.setConnectTimeout(15000);
-                conn.setRequestMethod("POST");
-                conn.setDoInput(true);
+                conn.setConnectTimeout(150000);
                 conn.setDoOutput(true);
 
                 // Convert the raw seconds sent into HH:MM:SS
@@ -95,13 +98,15 @@ public class SmsReceiver extends BroadcastReceiver {
                 writer.close();
                 os.close();
 
-                conn.disconnect();
-
+                Log.v(TAG, "Finished connecting to url, result: " + conn.getResponseMessage());
             } catch (MalformedURLException e) {
                 Log.e(TAG, "Malformed URL set: " + urlString);
             } catch (IOException e) {
                 Log.e(TAG, "Caught IOException!");
                 e.printStackTrace();
+            } finally {
+                if (conn != null)
+                    conn.disconnect();
             }
 
             return null;
